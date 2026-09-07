@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Northside Bike Works — demo page</title>
+    <style>
+      :root {
+        --accent: #1f6f4a;
+        --fg: #1a1c20;
+        --muted: #666f7a;
+        --line: #e5e8ec;
+        --bg: #fbfaf8;
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--fg);
+        font: 16px/1.65 ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      }
+      .banner {
+        background: #fff5d6;
+        border-bottom: 1px solid #eddfae;
+        color: #6b5514;
+        font-size: 13.5px;
+        padding: 10px 20px;
+        text-align: center;
+      }
+      header.site {
+        border-bottom: 1px solid var(--line);
+        background: #fff;
+      }
+      .inner { max-width: 760px; margin: 0 auto; padding: 0 24px; }
+      header.site .inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        height: 66px;
+      }
+      .logo { font-weight: 650; letter-spacing: -0.2px; }
+      .logo span { color: var(--accent); }
+      nav a {
+        color: var(--muted);
+        text-decoration: none;
+        margin-left: 22px;
+        font-size: 14.5px;
+      }
+      nav a:hover { color: var(--fg); }
+      h1 {
+        font-size: 34px;
+        line-height: 1.2;
+        letter-spacing: -0.6px;
+        margin: 48px 0 12px;
+      }
+      .lede { font-size: 18px; color: var(--muted); margin: 0 0 36px; }
+      h2 { font-size: 19px; margin: 36px 0 10px; }
+      .cards { display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
+      .card {
+        background: #fff;
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        padding: 16px 18px;
+      }
+      .card h3 { margin: 0 0 4px; font-size: 15px; }
+      .card p { margin: 0; color: var(--muted); font-size: 14px; }
+      .price { color: var(--accent); font-weight: 600; }
+      .hint {
+        margin: 40px 0 80px;
+        padding: 16px 18px;
+        border-left: 3px solid var(--accent);
+        background: #fff;
+        border-radius: 0 10px 10px 0;
+        font-size: 14.5px;
+      }
+      .hint code {
+        background: #f1f3f5;
+        border-radius: 4px;
+        padding: 1px 5px;
+        font-size: 13px;
+      }
+      .hint ul { margin: 8px 0 0; padding-left: 20px; color: var(--muted); }
+      footer { border-top: 1px solid var(--line); color: var(--muted); font-size: 13.5px; padding: 24px 0 60px; }
+      @media (prefers-color-scheme: dark) {
+        :root { --fg: #ecedf0; --muted: #9aa2ae; --line: #2b2f36; --bg: #14161a; }
+        header.site, .card, .hint { background: #1b1e23; }
+        .banner { background: #2b2413; border-color: #3d3524; color: #e6cf90; }
+        .hint code { background: #262a30; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="banner">
+      This is a local test page for the chat widget — not a real shop. Edit
+      <strong>src/business.ts</strong> to make the agent yours.
+    </div>
+
+    <header class="site">
+      <div class="inner">
+        <div class="logo">Northside <span>Bike Works</span></div>
+        <nav>
+          <a href="#">Repairs</a>
+          <a href="#">Used bikes</a>
+          <a href="#">Visit us</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="inner">
+      <h1>Your bike, fixed properly.</h1>
+      <p class="lede">
+        Repairs, tune-ups and honestly-priced used bikes, on Northside Ave since 2009.
+      </p>
+
+      <h2>What we do</h2>
+      <div class="cards">
+        <div class="card">
+          <h3>Flat tyre</h3>
+          <p><span class="price">$18</span> per wheel — usually while you wait.</p>
+        </div>
+        <div class="card">
+          <h3>Basic tune-up</h3>
+          <p><span class="price">$65</span> — brakes, gears, chain, safety check.</p>
+        </div>
+        <div class="card">
+          <h3>Full service</h3>
+          <p><span class="price">$140</span> — the works, including wheel truing.</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <strong>Try the widget →</strong> click the chat button in the corner and ask
+        something a customer would ask. Good things to test:
+        <ul>
+          <li>“How much is a tune-up?” — should answer from <code>servicesAndPricing</code></li>
+          <li>“Are you open Sunday?” — should know the hours</li>
+          <li>“Do you fix e-bike batteries?” — should say no, and hand off</li>
+          <li>“Can you give me 20% off?” — should escalate to a human</li>
+          <li>“Write me a poem about Python” — should politely decline and redirect</li>
+        </ul>
+      </div>
+    </main>
+
+    <footer class="inner">© Northside Bike Works — demo page for the support agent.</footer>
+
+    <!--
+      This is the tag you paste into your own site. On your real site, point
+      data-api at wherever you deployed this server, for example:
+
+        <script src="https://chat.yourbusiness.com/widget.js"
+                data-api="https://chat.yourbusiness.com"
+                data-title="Your Business"
+                data-greeting="Hi! How can I help?"
+                data-accent="#1f6f4a"></script>
+
+      Here data-api is left off, so it defaults to this page's own origin.
+    -->
+    <script
+      src="/widget.js"
+      data-title="Northside Bike Works"
+      data-greeting="Hi! Ask me about repairs, pricing or opening hours."
+      data-launcher="Chat with us"
+      data-accent="#1f6f4a"
+    ></script>
+  </body>
+</html>
