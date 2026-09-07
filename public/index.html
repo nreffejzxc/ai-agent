@@ -3,164 +3,528 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Northside Bike Works — demo page</title>
+    <title>Northside Bike Works — repairs, tune-ups &amp; used bikes in Portland</title>
+    <meta
+      name="description"
+      content="Neighbourhood bike shop on Northside Ave, Portland. Repairs, tune-ups, honest used bikes. Ask our assistant about prices and hours."
+    />
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' rx='4' fill='%2316a34a'/%3E%3Ccircle cx='8' cy='8' r='3.4' fill='none' stroke='white' stroke-width='1.3'/%3E%3C/svg%3E"
+    />
     <style>
       :root {
-        --accent: #1f6f4a;
-        --fg: #1a1c20;
-        --muted: #666f7a;
-        --line: #e5e8ec;
-        --bg: #fbfaf8;
+        --accent: #16a34a;        /* the one green — used by buttons AND the widget */
+        --accent-deep: #107a35;   /* readable green text on light */
+        --accent-bright: #34d399; /* green text on the dark hero */
+        --on-accent: #ffffff;
+        --fg: #141a21;
+        --muted: #5b6b7a;
+        --line: #e4e9ee;
+        --bg: #f7f9fb;
+        --surface: #ffffff;
+        --surface-2: #eef2f5;
+        --shadow: 0 1px 2px rgba(15, 23, 42, 0.04), 0 12px 30px -18px rgba(15, 23, 42, 0.25);
+        --hero-bg: #0b111c;       /* hero is always dark, in both themes */
+        --hero-fg: #eef2f7;
+        --hero-muted: #9fb0c2;
+        --radius: 16px;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --fg: #e7ecf2;
+          --muted: #9aa9b8;
+          --line: #2a3340;
+          --bg: #0d131b;
+          --surface: #131b25;
+          --surface-2: #18212d;
+          --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 16px 40px -24px rgba(0, 0, 0, 0.6);
+          --accent-deep: #4ade80;
+        }
       }
       * { box-sizing: border-box; }
+      html { scroll-behavior: smooth; }
       body {
         margin: 0;
         background: var(--bg);
         color: var(--fg);
-        font: 16px/1.65 ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+        font: 16px/1.6 ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        -webkit-font-smoothing: antialiased;
       }
-      .banner {
-        background: #fff5d6;
-        border-bottom: 1px solid #eddfae;
-        color: #6b5514;
-        font-size: 13.5px;
-        padding: 10px 20px;
-        text-align: center;
+      @media (prefers-reduced-motion: reduce) {
+        html { scroll-behavior: auto; }
       }
-      header.site {
-        border-bottom: 1px solid var(--line);
-        background: #fff;
+
+      .wrap { max-width: 1080px; margin: 0 auto; padding: 0 24px; }
+
+      /* ---------- masthead / hero (always dark) ---------- */
+      .masthead {
+        position: relative;
+        overflow: hidden;
+        background:
+          radial-gradient(720px 420px at 12% -10%, rgba(22, 163, 74, 0.22), transparent 60%),
+          radial-gradient(760px 460px at 95% 120%, rgba(20, 184, 166, 0.14), transparent 60%),
+          var(--hero-bg);
+        color: var(--hero-fg);
       }
-      .inner { max-width: 760px; margin: 0 auto; padding: 0 24px; }
-      header.site .inner {
+      .masthead::after {
+        /* faint tyre-track dots for texture */
+        content: "";
+        position: absolute;
+        inset: 0;
+        background-image: radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1.4px);
+        background-size: 26px 26px;
+        -webkit-mask-image: radial-gradient(700px 420px at 60% 30%, #000 0%, transparent 70%);
+        mask-image: radial-gradient(700px 420px at 60% 30%, #000 0%, transparent 70%);
+        pointer-events: none;
+      }
+      .chainring {
+        position: absolute;
+        right: -140px;
+        top: 40px;
+        width: 520px;
+        height: 520px;
+        opacity: 0.5;
+        pointer-events: none;
+      }
+      .chainring circle { fill: none; stroke: rgba(255, 255, 255, 0.06); }
+      @media (max-width: 900px) { .chainring { opacity: 0.25; right: -220px; } }
+
+      nav.row {
+        position: relative;
+        z-index: 1;
         display: flex;
         align-items: center;
         justify-content: space-between;
-        height: 66px;
+        gap: 24px;
+        height: 76px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.07);
       }
-      .logo { font-weight: 650; letter-spacing: -0.2px; }
-      .logo span { color: var(--accent); }
-      nav a {
-        color: var(--muted);
+      .logo {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-weight: 800;
+        letter-spacing: -0.02em;
+        font-size: 17px;
+      }
+      .logo .mark {
+        display: grid;
+        place-items: center;
+        width: 30px;
+        height: 30px;
+        border-radius: 9px;
+        background: var(--accent);
+        color: #fff;
+      }
+      .logo small { color: var(--hero-muted); font-weight: 600; }
+      .links { display: flex; gap: 6px; }
+      .links a {
+        color: var(--hero-muted);
         text-decoration: none;
-        margin-left: 22px;
         font-size: 14.5px;
+        font-weight: 600;
+        padding: 8px 13px;
+        border-radius: 999px;
       }
-      nav a:hover { color: var(--fg); }
-      h1 {
-        font-size: 34px;
-        line-height: 1.2;
-        letter-spacing: -0.6px;
-        margin: 48px 0 12px;
-      }
-      .lede { font-size: 18px; color: var(--muted); margin: 0 0 36px; }
-      h2 { font-size: 19px; margin: 36px 0 10px; }
-      .cards { display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
-      .card {
-        background: #fff;
-        border: 1px solid var(--line);
-        border-radius: 12px;
-        padding: 16px 18px;
-      }
-      .card h3 { margin: 0 0 4px; font-size: 15px; }
-      .card p { margin: 0; color: var(--muted); font-size: 14px; }
-      .price { color: var(--accent); font-weight: 600; }
-      .hint {
-        margin: 40px 0 80px;
-        padding: 16px 18px;
-        border-left: 3px solid var(--accent);
-        background: #fff;
-        border-radius: 0 10px 10px 0;
-        font-size: 14.5px;
-      }
-      .hint code {
-        background: #f1f3f5;
-        border-radius: 4px;
-        padding: 1px 5px;
+      .links a:hover { color: var(--hero-fg); background: rgba(255, 255, 255, 0.06); }
+      @media (max-width: 640px) { .links { display: none; } }
+
+      .hero { position: relative; z-index: 1; padding: 88px 24px 96px; }
+      @media (max-width: 640px) { .hero { padding: 64px 24px 72px; } }
+      .eyebrow {
+        margin: 0 0 18px;
+        color: var(--accent-bright);
+        font-weight: 700;
         font-size: 13px;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
       }
-      .hint ul { margin: 8px 0 0; padding-left: 20px; color: var(--muted); }
-      footer { border-top: 1px solid var(--line); color: var(--muted); font-size: 13.5px; padding: 24px 0 60px; }
-      @media (prefers-color-scheme: dark) {
-        :root { --fg: #ecedf0; --muted: #9aa2ae; --line: #2b2f36; --bg: #14161a; }
-        header.site, .card, .hint { background: #1b1e23; }
-        .banner { background: #2b2413; border-color: #3d3524; color: #e6cf90; }
-        .hint code { background: #262a30; }
+      h1.display {
+        margin: 0;
+        font-size: clamp(40px, 6vw, 66px);
+        line-height: 1.04;
+        letter-spacing: -0.035em;
+        font-weight: 800;
+        max-width: 17ch;
       }
+      .hero .lede {
+        margin: 22px 0 0;
+        color: var(--hero-muted);
+        font-size: 19px;
+        line-height: 1.55;
+        max-width: 52ch;
+      }
+      .cta { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 34px; }
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 9px;
+        padding: 13px 22px;
+        border-radius: 12px;
+        font-weight: 700;
+        font-size: 15.5px;
+        text-decoration: none;
+        border: 1px solid transparent;
+        transition: transform 0.12s ease, background 0.15s ease, border-color 0.15s ease;
+      }
+      .btn:active { transform: translateY(1px); }
+      .btn.primary { background: var(--accent); color: var(--on-accent); }
+      .btn.primary:hover { background: #15803d; }
+      .btn.ghost-dark { border-color: rgba(255, 255, 255, 0.22); color: var(--hero-fg); background: rgba(255, 255, 255, 0.03); }
+      .btn.ghost-dark:hover { border-color: rgba(255, 255, 255, 0.45); background: rgba(255, 255, 255, 0.08); }
+      .btn svg { width: 17px; height: 17px; }
+
+      .hero .facts {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px 26px;
+        margin: 44px 0 0;
+        padding: 0;
+        list-style: none;
+        color: var(--hero-muted);
+        font-size: 14px;
+        font-weight: 600;
+      }
+      .hero .facts li { display: flex; align-items: center; gap: 8px; }
+      .hero .facts svg { width: 16px; height: 16px; color: var(--accent-bright); }
+
+      /* ---------- generic sections ---------- */
+      section { padding: 92px 0; }
+      section.alt { background: var(--surface); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+      .kicker {
+        margin: 0 0 10px;
+        color: var(--accent-deep);
+        font-weight: 800;
+        font-size: 13px;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+      }
+      h2.title { margin: 0; font-size: clamp(28px, 3.6vw, 38px); letter-spacing: -0.025em; font-weight: 800; }
+      .sub { margin: 12px 0 0; color: var(--muted); font-size: 17px; max-width: 60ch; }
+
+      /* services */
+      .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 18px; margin-top: 44px; }
+      .card {
+        background: var(--bg);
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        padding: 24px;
+        box-shadow: var(--shadow);
+      }
+      .card h3 { margin: 0; font-size: 16.5px; font-weight: 700; }
+      .card p { margin: 8px 0 0; color: var(--muted); font-size: 14.5px; }
+      .price { display: block; margin-top: 16px; font-weight: 800; font-size: 22px; color: var(--accent-deep); letter-spacing: -0.02em; }
+      .note {
+        margin-top: 34px;
+        padding: 15px 18px;
+        background: var(--surface-2);
+        border-radius: 12px;
+        color: var(--muted);
+        font-size: 14.5px;
+        border-left: 3px solid var(--accent);
+      }
+
+      /* visit */
+      .two-col { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 48px; margin-top: 44px; align-items: start; }
+      @media (max-width: 760px) { .two-col { grid-template-columns: 1fr; gap: 36px; } }
+      .hours { margin: 0; padding: 0; list-style: none; }
+      .hours li {
+        display: flex;
+        justify-content: space-between;
+        gap: 16px;
+        padding: 11px 0;
+        border-bottom: 1px dashed var(--line);
+        font-size: 15.5px;
+      }
+      .hours li .dow { font-weight: 700; }
+      .hours li.closed .t { color: var(--muted); }
+      .contact-lines { display: grid; gap: 14px; }
+      .contact-line {
+        display: flex;
+        gap: 14px;
+        align-items: flex-start;
+        padding: 15px 17px;
+        background: var(--bg);
+        border: 1px solid var(--line);
+        border-radius: 13px;
+        font-size: 15px;
+      }
+      .contact-line svg { width: 19px; height: 19px; color: var(--accent); flex: none; margin-top: 2px; }
+      .contact-line b { display: block; font-size: 13px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin-bottom: 2px; }
+      .contact-line a { color: var(--fg); text-decoration: none; font-weight: 600; }
+      .contact-line a:hover { color: var(--accent-deep); }
+
+      /* faq */
+      details.faq {
+        background: var(--bg);
+        border: 1px solid var(--line);
+        border-radius: 13px;
+        margin-top: 12px;
+      }
+      details.faq summary {
+        list-style: none;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 18px;
+        padding: 17px 20px;
+        font-weight: 700;
+        font-size: 15.5px;
+      }
+      details.faq summary::-webkit-details-marker { display: none; }
+      details.faq summary .plus { flex: none; color: var(--accent); transition: transform 0.2s ease; }
+      details.faq[open] summary .plus { transform: rotate(45deg); }
+      details.faq .a { padding: 0 20px 18px; color: var(--muted); font-size: 15px; }
+
+      /* chat callout band (always dark) */
+      .callout {
+        background:
+          radial-gradient(640px 340px at 85% 0%, rgba(22, 163, 74, 0.2), transparent 60%),
+          #0b111c;
+        color: #eef2f7;
+      }
+      .callout .inner { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 26px; }
+      .callout h2 { margin: 0; font-size: clamp(24px, 3vw, 32px); letter-spacing: -0.02em; font-weight: 800; }
+      .callout p { margin: 8px 0 0; color: #9fb0c2; max-width: 56ch; }
+      .chat-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        background: rgba(255, 255, 255, 0.06);
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        color: #d8e2ec;
+        padding: 12px 18px;
+        border-radius: 999px;
+        font-size: 14.5px;
+        font-weight: 600;
+      }
+      .chat-badge svg { width: 18px; height: 18px; color: var(--accent-bright); }
+
+      footer { border-top: 1px solid var(--line); padding: 30px 0 90px; }
+      footer .row { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; color: var(--muted); font-size: 14px; }
+      footer .brand { font-weight: 700; color: var(--fg); }
+      footer .brand span { color: var(--accent-deep); }
+      footer code { background: var(--surface-2); border-radius: 5px; padding: 1px 6px; font-size: 12.5px; }
     </style>
   </head>
   <body>
-    <div class="banner">
-      This is a local test page for the chat widget — not a real shop. Edit
-      <strong>src/business.ts</strong> to make the agent yours.
-    </div>
+    <header class="masthead">
+      <svg class="chainring" viewBox="0 0 200 200" aria-hidden="true">
+        <circle cx="100" cy="100" r="96" />
+        <circle cx="100" cy="100" r="78" stroke-dasharray="6 5" />
+        <circle cx="100" cy="100" r="56" />
+        <circle cx="100" cy="100" r="26" />
+      </svg>
 
-    <header class="site">
-      <div class="inner">
-        <div class="logo">Northside <span>Bike Works</span></div>
-        <nav>
-          <a href="#">Repairs</a>
-          <a href="#">Used bikes</a>
-          <a href="#">Visit us</a>
-        </nav>
+      <div class="wrap">
+        <div class="row">
+          <div class="logo">
+            <span class="mark" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                <circle cx="5" cy="17" r="3"/><circle cx="19" cy="17" r="3"/>
+                <path d="M8 17h8M13 17 11 9M11 9l1.6-3.4a1.5 1.5 0 0 1 1.4-.9H17M11 9l-2.2-1.3a1.5 1.5 0 0 0-1.6.1L4.5 10"/>
+              </svg>
+            </span>
+            Northside <small>Bike Works</small>
+          </div>
+          <nav class="links" aria-label="Main">
+            <a href="#services">Services</a>
+            <a href="#visit">Visit</a>
+            <a href="#faq">FAQ</a>
+          </nav>
+        </div>
+      </div>
+
+      <div class="wrap">
+        <div class="hero">
+          <p class="eyebrow">Bike repairs · Tune-ups · Used bikes — Portland since 2009</p>
+          <h1 class="display">Your bike, fixed properly.</h1>
+          <p class="lede">
+            A neighbourhood bike shop doing repairs, tune-ups and used-bike sales
+            for commuters and weekend riders. Honest work, fair prices, same-day when we can.
+          </p>
+          <div class="cta">
+            <a class="btn primary" href="https://northsidebikeworks.example/book" target="_blank" rel="noopener">
+              Book a service
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </a>
+            <a class="btn ghost-dark" href="#services">See what we do</a>
+          </div>
+          <ul class="facts">
+            <li>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+              Small repairs usually while you wait
+            </li>
+            <li>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 4 5v6c0 5 3.4 9.4 8 11 4.6-1.6 8-6 8-11V5z"/><path d="m9 12 2 2 4-4"/></svg>
+              90-day labour guarantee
+            </li>
+            <li>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+              Open Mon–Fri 9–6, Sat 10–4
+            </li>
+          </ul>
+        </div>
       </div>
     </header>
 
-    <main class="inner">
-      <h1>Your bike, fixed properly.</h1>
-      <p class="lede">
-        Repairs, tune-ups and honestly-priced used bikes, on Northside Ave since 2009.
-      </p>
+    <main>
+      <!-- Services & pricing -->
+      <section class="alt" id="services">
+        <div class="wrap">
+          <p class="kicker">Services &amp; pricing</p>
+          <h2 class="title">Straightforward work, at prices that stay honest.</h2>
+          <p class="sub">If it’s not on this list, ask — diagnosis of an unknown problem is free and takes about ten minutes in store.</p>
 
-      <h2>What we do</h2>
-      <div class="cards">
-        <div class="card">
-          <h3>Flat tyre</h3>
-          <p><span class="price">$18</span> per wheel — usually while you wait.</p>
-        </div>
-        <div class="card">
-          <h3>Basic tune-up</h3>
-          <p><span class="price">$65</span> — brakes, gears, chain, safety check.</p>
-        </div>
-        <div class="card">
-          <h3>Full service</h3>
-          <p><span class="price">$140</span> — the works, including wheel truing.</p>
-        </div>
-      </div>
+          <div class="grid">
+            <div class="card">
+              <h3>Flat tyre repair</h3>
+              <p>Usually done the same day, while you wait.</p>
+              <span class="price">$18</span>
+            </div>
+            <div class="card">
+              <h3>Basic tune-up</h3>
+              <p>Brakes, gears, chain clean and a safety check.</p>
+              <span class="price">$65</span>
+            </div>
+            <div class="card">
+              <h3>Full service</h3>
+              <p>The works — plus wheel truing, bearing check, and new cables and brake pads if needed.</p>
+              <span class="price">$140</span>
+            </div>
+            <div class="card">
+              <h3>Wheel build</h3>
+              <p>From supplied parts.</p>
+              <span class="price">$90 <small style="color:var(--muted);font-weight:600;font-size:13px;">labour</small></span>
+            </div>
+            <div class="card">
+              <h3>Used bikes</h3>
+              <p>Depending on condition — every one sold with a free 6-week check-up.</p>
+              <span class="price">$180–600</span>
+            </div>
+            <div class="card">
+              <h3>Diagnosis</h3>
+              <p>Not sure what’s wrong? Bring it in — about ten minutes.</p>
+              <span class="price">Free</span>
+            </div>
+          </div>
 
-      <div class="hint">
-        <strong>Try the widget →</strong> click the chat button in the corner and ask
-        something a customer would ask. Good things to test:
-        <ul>
-          <li>“How much is a tune-up?” — should answer from <code>servicesAndPricing</code></li>
-          <li>“Are you open Sunday?” — should know the hours</li>
-          <li>“Do you fix e-bike batteries?” — should say no, and hand off</li>
-          <li>“Can you give me 20% off?” — should escalate to a human</li>
-          <li>“Write me a poem about Python” — should politely decline and redirect</li>
-        </ul>
-      </div>
+          <div class="note">
+            Repairs booked before 11am are usually ready the same day — after that, the next business day.
+            Tune-ups and full services are best booked ahead. Labour is guaranteed for 90 days.
+          </div>
+        </div>
+      </section>
+
+      <!-- Visit -->
+      <section id="visit">
+        <div class="wrap">
+          <p class="kicker">Visit us</p>
+          <h2 class="title">412 Northside Ave, Portland.</h2>
+          <p class="sub">Street parking out front, entrance on the side. Walk-ins welcome for anything that takes under 15 minutes.</p>
+
+          <div class="two-col">
+            <div>
+              <p class="kicker" style="margin:0 0 12px;">Opening hours</p>
+              <ul class="hours">
+                <li><span class="dow">Monday – Friday</span><span>9:00am – 6:00pm</span></li>
+                <li><span class="dow">Saturday</span><span>10:00am – 4:00pm</span></li>
+                <li class="closed"><span class="dow">Sunday</span><span class="t">Closed</span></li>
+                <li class="closed"><span class="dow">Public holidays</span><span class="t">Closed</span></li>
+              </ul>
+            </div>
+
+            <div class="contact-lines">
+              <div class="contact-line">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                <span><b>Call us</b><a href="tel:+15550142280">(555) 014-2280</a></span>
+              </div>
+              <div class="contact-line">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/></svg>
+                <span><b>Email</b><a href="mailto:hello@northsidebikeworks.example">hello@northsidebikeworks.example</a></span>
+              </div>
+              <div class="contact-line">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+                <span><b>Book a tune-up or service</b><a href="https://northsidebikeworks.example/book" target="_blank" rel="noopener">northsidebikeworks.example/book</a></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- FAQ -->
+      <section class="alt" id="faq">
+        <div class="wrap">
+          <p class="kicker">Good to know</p>
+          <h2 class="title">Questions customers ask.</h2>
+
+          <details class="faq" open>
+            <summary>Do I need an appointment?
+              <span class="plus"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span>
+            </summary>
+            <div class="a">Not for small jobs like a flat tyre or a quick adjustment — just come in. Tune-ups and full services should be booked ahead.</div>
+          </details>
+
+          <details class="faq">
+            <summary>How long will my repair take?
+              <span class="plus"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span>
+            </summary>
+            <div class="a">Small repairs are often done while you wait. Tune-ups are same day if dropped off before 11am. Full services take 2 to 3 days in busy season.</div>
+          </details>
+
+          <details class="faq">
+            <summary>Do you work on electric bikes?
+              <span class="plus"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span>
+            </summary>
+            <div class="a">Yes for brakes, gears, wheels and everything mechanical. We don’t work on the motor or the battery — for those you’ll need the manufacturer’s dealer.</div>
+          </details>
+
+          <details class="faq">
+            <summary>Do you buy used bikes?
+              <span class="plus"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span>
+            </summary>
+            <div class="a">Sometimes, depending on what we already have in stock. Bring it by or send a photo and we’ll tell you honestly.</div>
+          </details>
+
+          <p class="sub" style="margin-top:26px;">Something not covered? Our assistant answers from the same facts on this page — it’s the chat bubble in the corner.</p>
+        </div>
+      </section>
+
+      <!-- Chat callout -->
+      <section class="callout">
+        <div class="wrap inner">
+          <div>
+            <h2>Not sure where to start?</h2>
+            <p>Ask the assistant about prices, opening hours, what we service — or whether you need to book ahead. If it can’t help, it’ll point you straight to a person.</p>
+          </div>
+          <span class="chat-badge">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8z"/></svg>
+            Open the chat bubble in the corner
+          </span>
+        </div>
+      </section>
     </main>
 
-    <footer class="inner">© Northside Bike Works — demo page for the support agent.</footer>
+    <footer>
+      <div class="wrap row">
+        <span>© Northside <span class="brand">Bike <span>Works</span></span> — demo site.</span>
+        <span>The assistant answers from the sample data in <code>src/business.ts</code>.</span>
+      </div>
+    </footer>
 
     <!--
-      This is the tag you paste into your own site. On your real site, point
-      data-api at wherever you deployed this server, for example:
-
-        <script src="https://chat.yourbusiness.com/widget.js"
-                data-api="https://chat.yourbusiness.com"
-                data-title="Your Business"
-                data-greeting="Hi! How can I help?"
-                data-accent="#1f6f4a"></script>
-
-      Here data-api is left off, so it defaults to this page's own origin.
+      The chat widget. On your real site, point data-api at wherever you host
+      this server, e.g.  data-api="https://chat.yourbusiness.com" — here it's
+      omitted, so it talks to this page's own origin (localhost:3000 in dev).
     -->
     <script
       src="/widget.js"
       data-title="Northside Bike Works"
       data-greeting="Hi! Ask me about repairs, pricing or opening hours."
       data-launcher="Chat with us"
-      data-accent="#1f6f4a"
+      data-accent="#16a34a"
     ></script>
   </body>
 </html>
